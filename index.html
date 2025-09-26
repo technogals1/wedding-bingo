@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Bingo</title>
+    <style>
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            color: #8b5a5a;
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .subtitle {
+            color: #666;
+            font-style: italic;
+            margin-top: 5px;
+        }
+        
+        .bingo-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 3px;
+            background: #8b5a5a;
+            padding: 3px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .bingo-cell {
+            background: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 11px;
+            line-height: 1.2;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 3px;
+        }
+        
+        .bingo-cell:hover {
+            background: #f0f0f0;
+            transform: scale(1.05);
+        }
+        
+        .bingo-cell.marked {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a5a);
+            color: white;
+            font-weight: bold;
+            transform: scale(0.95);
+        }
+        
+        .bingo-cell.free {
+            background: linear-gradient(135deg, #51cf66, #40c057);
+            color: white;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .instructions {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 4px solid #8b5a5a;
+            margin-top: 20px;
+        }
+        
+        .instructions h3 {
+            margin-top: 0;
+            color: #8b5a5a;
+        }
+        
+        .reset-button {
+            display: block;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background: #8b5a5a;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        
+        .reset-button:hover {
+            background: #6d4545;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>💒 Wedding Bingo 💒</h1>
+            <p class="subtitle">Mark off the moments as they happen!</p>
+        </div>
+        
+        <div class="bingo-grid" id="bingoGrid">
+            <!-- Grid will be populated by JavaScript -->
+        </div>
+        
+        <button class="reset-button" onclick="resetGame()">Reset Card</button>
+        
+        <div class="instructions">
+            <h3>How to Play:</h3>
+            <p>• Watch for these moments during the wedding ceremony and reception</p>
+            <p>• Click on a square when you spot that moment happening</p>
+            <p>• Try to get 5 in a row (horizontal, vertical, or diagonal) for BINGO!</p>
+            <p>• Have fun and enjoy celebrating the happy couple! 💕</p>
+        </div>
+    </div>
+
+    <script>
+        const bingoItems = [
+            "Dan cries",
+            "Steph cries",
+            "Alicia dances",
+            "Brad says something offensive",
+            "Someone doesn't wear black",
+            "Someone brings a gift... why?",
+            "Becca hugs someone",
+            "Someone gives up on wearing heels",
+            "Bride tears up",
+            "Groom fumbles with ring",
+            "Someone takes a selfie",
+            "Bride's dress gets stepped on",
+            "FREE SPACE",
+            "Couple kisses before being told to",
+            "Someone whispers during ceremony",
+            "Someone gets a second piece of cake",
+            "Anyone makes a joke in their speech",
+            "Maid of honor cries during speech",
+            "The band doesn't meet Dan's expectations",
+            "Someone spills or gets food on themselves",
+            "Bride's veil needs adjusting",
+            "Brandon and Cameron have a bromance",
+            "Someone is late",
+            "Dan hugs literally everyone",
+            "Cameron drinks an old fashioned",
+            "Someone dances embarrassingly",
+            "Angelina gets the drunkest"
+        ];
+
+        let currentCard = [];
+        
+        function shuffleArray(array) {
+            const shuffled = [...array];
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            return shuffled;
+        }
+        
+        function createBingoCard() {
+            const shuffled = shuffleArray(bingoItems);
+            currentCard = shuffled.slice(0, 25);
+            
+            // Ensure FREE SPACE is in the middle
+            const freeIndex = currentCard.indexOf("FREE SPACE");
+            if (freeIndex !== 12) {
+                [currentCard[12], currentCard[freeIndex]] = [currentCard[freeIndex], currentCard[12]];
+            }
+            
+            const grid = document.getElementById('bingoGrid');
+            grid.innerHTML = '';
+            
+            currentCard.forEach((item, index) => {
+                const cell = document.createElement('div');
+                cell.className = 'bingo-cell';
+                cell.textContent = item;
+                cell.onclick = () => toggleCell(cell, index);
+                
+                if (item === "FREE SPACE") {
+                    cell.classList.add('free', 'marked');
+                }
+                
+                grid.appendChild(cell);
+            });
+        }
+        
+        function toggleCell(cell, index) {
+            if (currentCard[index] === "FREE SPACE") return;
+            
+            cell.classList.toggle('marked');
+            checkForBingo();
+        }
+        
+        function checkForBingo() {
+            const cells = document.querySelectorAll('.bingo-cell');
+            const marked = Array.from(cells).map(cell => cell.classList.contains('marked'));
+            
+            // Check rows
+            for (let i = 0; i < 5; i++) {
+                if (marked.slice(i * 5, i * 5 + 5).every(Boolean)) {
+                    celebrateBingo();
+                    return;
+                }
+            }
+            
+            // Check columns
+            for (let i = 0; i < 5; i++) {
+                if ([0, 1, 2, 3, 4].every(row => marked[row * 5 + i])) {
+                    celebrateBingo();
+                    return;
+                }
+            }
+            
+            // Check diagonals
+            if ([0, 6, 12, 18, 24].every(i => marked[i]) || 
+                [4, 8, 12, 16, 20].every(i => marked[i])) {
+                celebrateBingo();
+                return;
+            }
+        }
+        
+        function celebrateBingo() {
+            setTimeout(() => {
+                alert('🎉 BINGO! Congratulations! 🎉\n\nYou\'ve captured some beautiful wedding moments!');
+            }, 100);
+        }
+        
+        function resetGame() {
+            createBingoCard();
+        }
+        
+        // Initialize the card
+        createBingoCard();
+    </script>
+</body>
+</html>
