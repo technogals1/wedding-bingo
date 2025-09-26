@@ -179,7 +179,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>💒 Wedding Bingo 💒</h1>
+            <h1>💒 Morrow Wedding Today! 💒</h1>
             <p class="subtitle">Mark off the moments as they happen!</p>
         </div>
         
@@ -320,7 +320,9 @@
         }
         
         function resetGame() {
-            createBingoCard();
+            if (confirm('Do you mean to reset? This will clear your progress and generate a new card.')) {
+                createBingoCard();
+            }
         }
         
         // Initialize the card
