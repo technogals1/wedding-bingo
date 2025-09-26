@@ -9,8 +9,9 @@
             font-family: 'Georgia', serif;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             margin: 0;
-            padding: 20px;
+            padding: 10px;
             min-height: 100vh;
+            box-sizing: border-box;
         }
         
         .container {
@@ -19,7 +20,19 @@
             background: white;
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            padding: 30px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 5px;
+            }
+            
+            .container {
+                padding: 15px;
+                border-radius: 10px;
+            }
         }
         
         .header {
@@ -32,6 +45,18 @@
             font-size: 2.5em;
             margin: 0;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2em;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8em;
+            }
         }
         
         .subtitle {
@@ -52,7 +77,7 @@
         
         .bingo-cell {
             background: white;
-            padding: 10px;
+            padding: 8px;
             text-align: center;
             font-size: 11px;
             line-height: 1.2;
@@ -63,6 +88,32 @@
             cursor: pointer;
             transition: all 0.3s ease;
             border-radius: 3px;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 768px) {
+            .bingo-cell {
+                font-size: 10px;
+                min-height: 55px;
+                padding: 6px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .bingo-cell {
+                font-size: 9px;
+                min-height: 50px;
+                padding: 4px;
+                line-height: 1.1;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .bingo-cell {
+                font-size: 8px;
+                min-height: 45px;
+                padding: 3px;
+            }
         }
         
         .bingo-cell:hover {
@@ -100,7 +151,7 @@
         .reset-button {
             display: block;
             margin: 20px auto;
-            padding: 10px 20px;
+            padding: 12px 24px;
             background: #8b5a5a;
             color: white;
             border: none;
@@ -108,6 +159,16 @@
             cursor: pointer;
             font-size: 16px;
             transition: background 0.3s ease;
+            min-height: 44px;
+            box-sizing: border-box;
+        }
+        
+        @media (max-width: 480px) {
+            .reset-button {
+                width: 100%;
+                padding: 15px;
+                font-size: 18px;
+            }
         }
         
         .reset-button:hover {
